@@ -18,4 +18,4 @@ def img2file(imgArray):
     im = Image.fromarray(imgArray)
 
     # save
-    im.save("output_img")
+    im.save("output.jpg")

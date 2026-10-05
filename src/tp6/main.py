@@ -1,4 +1,4 @@
-from tp6.utils import imgArray, img2file, grayscale
+from tp6.utils import imgArray, img2file, grayscale, convolution
 import numpy as np
 
 
@@ -12,10 +12,15 @@ def main():
         print("w : ", np.shape(img)[1])
         print("color channels : ", np.shape(img)[2])
         
-        imgG = grayscale(img)
-        print("shape : ", np.shape(imgG))
+        # imgG = grayscale(img)
+        # print("shape : ", np.shape(imgG))
 
-        img2file(imgG)
+        # img2file(imgG)
+
+        k = np.full((3,3), 1/9)
+
+        conv_res = convolution(img, k)
+        img2file(conv_res)
 
 
         

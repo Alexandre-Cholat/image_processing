@@ -19,3 +19,18 @@ def img2file(imgArray):
 
     # save
     im.save("output.jpg")
+
+# returns a Numpy array representing the grayscale
+# Gray = 0.2989 × R + 0.5870 × G + 0.1140 × B
+def grayscale(imgArray):
+    rows, cols, channels = imgArray.shape
+    grayscale_img = np.empty([rows, cols])
+
+    for r in range(rows):
+        for c in range(cols):
+            pixel = imgArray[r, c]
+            val = 0.2989 * pixel[0] + 0.5870 * pixel[1] + 0.1140 * pixel[2]
+            grayscale_img[r,c] = val
+            
+    return grayscale_img.astype(np.uint8)
+

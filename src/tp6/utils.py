@@ -35,11 +35,19 @@ def grayscale(imgArray):
             val = 0.2989 * pixel[0] + 0.5870 * pixel[1] + 0.1140 * pixel[2]
             grayscale_img[r,c] = val
             
-    return grayscale_img.astype(np.uint8)
+    return grayscale_img
 
 # takes an image array and a 2D Numpy array representing the convolution kernel. The
 # function should return the filtered image as a Numpy array.
-def conv(imgArray, kernel):
+def convolution(imgArray, kernel):
+    # Check if the image is grayscale (2D) or color (3D)
+    is_grayscale = len(imgArray.shape) == 2
+    
+    if is_grayscale:
+        # Convert (H, W) -> (H, W, 1) so the rest of the code works
+        imgArray = imgArray[:, :, np.newaxis]
+
+
     rows, cols, channels = imgArray.shape
     
     # calc padding
@@ -67,6 +75,30 @@ def conv(imgArray, kernel):
 
 
 
+    # convert it back to 2D if greyscale
+    if is_grayscale:
+        # Convert (H, W, 1) -> (H, W)
+        return filtered_img[:, :, 0]
     
     return filtered_img
 
+def gaussianBlur(imgArray, size = 5):
+    if not isinstance(size, (int, np.integer)) or size <= 0 or size % 2 == 0:
+        raise ValueError("size must be a positive odd integer, e.g., 3, 5, 7, 9 ")
+
+    sigma = size / 6.0
+    positions = np.arange(size, dtype=float) - size // 2
+    kernel = np.exp(-(positions ** 2) / (2 * sigma ** 2))
+    k = kernel / kernel.sum()
+
+    # kernels
+    vertical_k = k.reshape(size, 1)
+    horizontal_k = k.reshape(1, size)
+
+    a = convolution(imgArray, vertical_k)
+    b = convolution(a, horizontal_k)
+
+    return b
+
+    
+    

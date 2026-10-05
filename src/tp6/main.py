@@ -1,10 +1,10 @@
-from tp6.utils import imgArray, img2file, grayscale, convolution
+from tp6.utils import imgArray, img2file, grayscale, convolution, gaussianBlur
 import numpy as np
 
 
 
 def main():
-        img = imgArray("sample_images/bmp_24.bmp")
+        img = imgArray("sample_images/1022.jpg")
 
         print(img)
         print("shape : ", np.shape(img))
@@ -12,15 +12,18 @@ def main():
         print("w : ", np.shape(img)[1])
         print("color channels : ", np.shape(img)[2])
         
-        # imgG = grayscale(img)
+        img = grayscale(img)
         # print("shape : ", np.shape(imgG))
 
         # img2file(imgG)
 
-        k = np.full((3,3), 1/9)
+        # k = np.full((3,3), 1/9)
 
-        conv_res = convolution(img, k)
-        img2file(conv_res)
+        # conv_res = convolution(img, k)
+        # img2file(conv_res)
+
+        img = gaussianBlur(img, size = 9)
+        img2file(img)
 
 
         

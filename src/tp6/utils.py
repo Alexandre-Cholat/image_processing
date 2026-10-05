@@ -40,6 +40,9 @@ def grayscale(imgArray):
 # takes an image array and a 2D Numpy array representing the convolution kernel. The
 # function should return the filtered image as a Numpy array.
 def convolution(imgArray, kernel):
+    # cast as float for sorbel filters to work
+    imgArray = imgArray.astype(np.float32)
+
     # Check if the image is grayscale (2D) or color (3D)
     is_grayscale = len(imgArray.shape) == 2
     
@@ -100,5 +103,20 @@ def gaussianBlur(imgArray, size = 5):
 
     return b
 
-    
-    
+# function that performs edge detection by applying
+# successively grayscale conversion, gaussian blur and the Sobel operato
+def edgeDetect(imgArray):
+    imgGrey = grayscale(imgArray)
+    imgGreyBlur = gaussianBlur(imgGrey)
+
+    # define sorbel filters
+    ks1 = np.array([[1,2,1],[0,0,0],[-1,-2,-1]])
+    ks2 = np.array([[1,0,-1],[2,0,-2],[1,0,-1]])
+
+    # apply filters
+    img_s1 = convolution(imgGreyBlur, ks1)
+    img_s2 = convolution(imgGreyBlur, ks2)
+
+    sorbel_magnitude = np.sqrt(img_s1**2 + img_s2**2)
+
+    return sorbel_magnitude

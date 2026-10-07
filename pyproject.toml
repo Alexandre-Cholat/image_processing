@@ -11,6 +11,7 @@ dependencies = [
     "click>=8.5.0",
     "numpy>=2.5.3",
     "pillow>=12.3.0",
+    "tdqm>=0.0.1",
 ]
 
 [project.scripts]

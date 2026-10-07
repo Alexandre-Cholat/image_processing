@@ -6,6 +6,7 @@ from PIL import Image
 import os
 from collections import defaultdict
 from tqdm import tqdm
+import json
 
 def get_all_jpg_files(directory):
     """
@@ -144,6 +145,9 @@ def prep_img(source, target, H, W):
     seen_hashes = set()
     processed_count = 0
 
+    # Initialize the mapping dictionary
+    path_mapping = {}
+
     # Process files
     # progress bar
     pbar = tqdm(img_list, desc="Processing Images", unit="img")
@@ -179,6 +183,10 @@ def prep_img(source, target, H, W):
 
                 # Save the processed image
                 final_img.save(destination, "JPEG", quality=95)
+
+                # Update the mapping dictionary ---
+                # We store the original path as the key and the new path as the value
+                path_mapping[path] = destination
                 
                 # Mark hash as seen
                 seen_hashes.add(file_hash)
@@ -188,6 +196,17 @@ def prep_img(source, target, H, W):
 
     print(f"Successfully moved:  {processed_count} files to {target}")
 
+    # Write the mapping to a JSON file ---
+    mapping_filename = "file_mapping.json"
+    mapping_path = os.path.join(target, mapping_filename)
+    
+    try:
+        with open(mapping_path, 'w', encoding='utf-8') as f:
+            # indent=4 makes the JSON file human-readable
+            json.dump(path_mapping, f, indent=4)
+        print(f"Successfully created mapping file: {mapping_path}")
+    except Exception as e:
+        print(f"[ERROR] Could not save JSON mapping: {e}")
 
 
 @click.command()
